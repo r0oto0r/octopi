@@ -17,7 +17,7 @@ services:
             - cluster
         volumes:
             - ikev2vpndata:/etc/ipsec.d
-            - $(pwd)/vpn.env:/opt/src/vpn.env:ro
+            - ./vpn.env:/opt/src/vpn.env:ro
         secrets:
             - vpn_ipsec_psk
             - vpn_users
