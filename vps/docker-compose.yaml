@@ -11,9 +11,9 @@ services:
         restart: always
         privileged: true
         environment:
-            - VPN_IPSEC_PSK=wBHfCpYi75evDqtEMNjp
-            - VPN_USER=test
-            - VPN_PASSWORD=wBHfCpYi75evDqtEMNjp
+            - VPN_IPSEC_PSK=/run/secrets/vpn_ipsec_psk
+            - VPN_USER=/run/secrets/vpn_users
+            - VPN_PASSWORD=/run/secrets/vpn_passwords
         ports:
             - "500:500/udp"
             - "4500:4500/udp"
@@ -21,7 +21,19 @@ services:
             - cluster
         volumes:
             - ikev2vpndata:/etc/ipsec.d
+        secrets:
+            - vpn_ipsec_psk
+            - vpn_users
+            - vpn_passwords
 
 volumes:
     ikev2vpndata:
         name: ikev2vpndata
+
+secrets:
+    vpn_ipsec_psk:
+        file: ./dockerbuild/vpn/secrets/vpn_ipsec_psk
+    vpn_users:
+        file: ./dockerbuild/vpn/secrets/vpn_users
+    vpn_passwords:
+        file: ./dockerbuild/vpn/secrets/vpn_passwords
