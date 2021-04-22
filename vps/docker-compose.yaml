@@ -1,0 +1,27 @@
+version: '3.9'
+
+networks:
+    cluster:
+        name: cluster
+          
+services:
+    vpnserver:
+        image: hwdsl2/ipsec-vpn-server
+        container_name: vpnserver
+        restart: always
+        privileged: true
+        environment:
+            - VPN_IPSEC_PSK=wBHfCpYi75evDqtEMNjp
+            - VPN_USER=test
+            - VPN_PASSWORD=wBHfCpYi75evDqtEMNjp
+        ports:
+            - "500:500/udp"
+            - "4500:4500/udp"
+        networks:
+            - cluster
+        volumes:
+            - ikev2vpndata:/etc/ipsec.d
+
+volumes:
+    ikev2vpndata:
+        name: ikev2vpndata

@@ -1,0 +1,148 @@
+version: '3.9'
+
+networks:
+    cluster:
+        name: cluster
+    lan:
+        name: lan
+        driver: macvlan
+        driver_opts:
+            parent: eth0
+        ipam:
+            config:
+                - subnet: 192.168.178.0/24
+          
+services:
+    maindb:
+        build: dockerbuild/maindb
+        image: my/maindb
+        container_name: maindb
+        environment:
+            - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/maindb_root_password
+        ports:
+            - "3306:3306"
+        networks:
+            - cluster
+        volumes:
+            - maindb:/mariadb
+        secrets:
+            - maindb_root_password
+
+    redis:
+        image: 'bitnami/redis:latest'
+        container_name: redis
+        ports:
+            - "6379:6379"
+        networks:
+            - cluster
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        
+    nextcloud:
+        image: nextcloud
+        container_name: nextcloud
+        restart: always
+        ports:
+            - "8081:80"
+        networks:
+            - cluster
+        volumes:
+            - nextcloud:/var/www/html
+        environment:
+            - MYSQL_HOST=maindb
+            - MYSQL_PASSWORD=nextcloud
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+            - NEXTCLOUD_ADMIN_PASSWORD_FILE=/run/secrets/nextcloud_admin_password
+            - NEXTCLOUD_ADMIN_USER_FILE=/run/secrets/nextcloud_admin_user
+            - REDIS_HOST=redis
+            - REDIS_HOST_PORT=6379
+        depends_on:
+            - maindb
+            - redis
+        secrets:
+            - nextcloud_admin_password
+            - nextcloud_admin_user
+
+    travelblog:
+        image: wordpress
+        container_name: travelblog
+        restart: always
+        environment:
+            WORDPRESS_DB_HOST: maindb
+            WORDPRESS_DB_USER: travelblog
+            WORDPRESS_DB_PASSWORD: travelblog
+            WORDPRESS_DB_NAME: travelblog
+        ports:
+            - "8080:80"
+        networks:
+            - cluster
+        volumes:
+            - travelblog:/var/www/html
+        depends_on:
+            - maindb
+
+    jdownloader:
+        image: jlesage/jdownloader-2
+        container_name: jdownloader
+        ports:
+            - "5800:5800"
+        networks:
+            - cluster
+        volumes:
+            - jdownloader:/config:rw
+            - $HOME/Downloads:/output:rw
+
+    teamspeak:
+        image: teamspeak
+        container_name: teamspeak
+        restart: always
+        environment:
+            TS3SERVER_DB_PLUGIN: ts3db_mariadb
+            TS3SERVER_DB_SQLCREATEPATH: create_mariadb
+            TS3SERVER_DB_HOST: maindb
+            TS3SERVER_DB_USER: teamspeak
+            TS3SERVER_DB_PASSWORD: teamspeak
+            TS3SERVER_DB_NAME: teamspeak
+            TS3SERVER_DB_WAITUNTILREADY: 30
+            TS3SERVER_LICENSE: accept
+        ports:
+            - "9987:9987/udp"
+            - "10011:10011"
+            - "30033:30033"
+        networks:
+            - cluster
+        depends_on:
+            - maindb
+
+    gerbera:
+        image: gerbera/gerbera
+        container_name: gerbera
+        volumes:
+            - gerberaconfig:/var/run/gerbera
+            - gerberacontent:/content:ro
+        networks: 
+            lan:
+                ipv4_address: 192.168.178.250
+
+volumes:
+    maindb:
+        name: maindb
+    nextcloud:
+        name: nextcloud
+    travelblog:
+        name: travelblog
+    jdownloader:
+        name: jdownloader
+    gerberaconfig:
+        name: gerberaconfig
+    gerberacontent:
+        name: gerberacontent
+
+secrets:
+    maindb_root_password:
+        file: ./dockerbuild/maindb/secrets/maindb_root_password
+    nextcloud_admin_user:
+        file: ./dockerbuild/nextcloud/secrets/nextcloud_admin_user
+    nextcloud_admin_password:
+        file: ./dockerbuild/nextcloud/secrets/nextcloud_admin_password
