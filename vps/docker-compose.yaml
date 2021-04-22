@@ -18,10 +18,6 @@ services:
         volumes:
             - ikev2vpndata:/etc/ipsec.d
             - ./vpn.env:/opt/src/vpn.env:ro
-        secrets:
-            - vpn_ipsec_psk
-            - vpn_users
-            - vpn_passwords
 
 volumes:
     ikev2vpndata:
