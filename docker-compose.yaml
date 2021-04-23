@@ -81,7 +81,7 @@ services:
     gerbera:
         image: gerbera/gerbera
         container_name: gerbera
-		privileged: true
+        privileged: true
         volumes:
             - gerberaconfig:/var/run/gerbera
             - gerberacontent:/content:ro
