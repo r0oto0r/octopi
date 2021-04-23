@@ -17,16 +17,12 @@ services:
         build: dockerbuild/maindb
         image: my/maindb
         container_name: maindb
-        environment:
-            - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/maindb_root_password
         ports:
             - "3306:3306"
         networks:
             - cluster
         volumes:
             - maindb:/mariadb
-        secrets:
-            - maindb_root_password
 
     redis:
         image: 'bitnami/redis:latest'
@@ -118,8 +114,6 @@ volumes:
         name: gerberacontent
 
 secrets:
-    maindb_root_password:
-        file: ./dockerbuild/maindb/secrets/maindb_root_password
     nextcloud_admin_user:
         file: ./dockerbuild/nextcloud/secrets/nextcloud_admin_user
     nextcloud_admin_password:
