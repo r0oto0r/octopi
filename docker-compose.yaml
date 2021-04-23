@@ -78,17 +78,6 @@ services:
         depends_on:
             - maindb
 
-    jdownloader:
-        image: jlesage/jdownloader-2
-        container_name: jdownloader
-        ports:
-            - "5800:5800"
-        networks:
-            - cluster
-        volumes:
-            - jdownloader:/config:rw
-            - $HOME/Downloads:/output:rw
-
     gerbera:
         image: gerbera/gerbera
         container_name: gerbera
@@ -107,8 +96,6 @@ volumes:
         name: nextcloud
     travelblog:
         name: travelblog
-    jdownloader:
-        name: jdownloader
     gerberaconfig:
         name: gerberaconfig
     gerberacontent:
