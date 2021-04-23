@@ -22,7 +22,7 @@ services:
         networks:
             - cluster
         volumes:
-            - maindb:/mariadb
+            - maindb:/var/lib/mysql
 
     redis:
         image: 'bitnami/redis:latest'
