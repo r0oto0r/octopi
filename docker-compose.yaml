@@ -93,28 +93,6 @@ services:
             - jdownloader:/config:rw
             - $HOME/Downloads:/output:rw
 
-    teamspeak:
-        image: teamspeak
-        container_name: teamspeak
-        restart: always
-        environment:
-            TS3SERVER_DB_PLUGIN: ts3db_mariadb
-            TS3SERVER_DB_SQLCREATEPATH: create_mariadb
-            TS3SERVER_DB_HOST: maindb
-            TS3SERVER_DB_USER: teamspeak
-            TS3SERVER_DB_PASSWORD: teamspeak
-            TS3SERVER_DB_NAME: teamspeak
-            TS3SERVER_DB_WAITUNTILREADY: 30
-            TS3SERVER_LICENSE: accept
-        ports:
-            - "9987:9987/udp"
-            - "10011:10011"
-            - "30033:30033"
-        networks:
-            - cluster
-        depends_on:
-            - maindb
-
     gerbera:
         image: gerbera/gerbera
         container_name: gerbera
