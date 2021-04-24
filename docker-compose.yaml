@@ -96,6 +96,10 @@ services:
         depends_on:
             - maindb
         restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.whoami.rule=Host(`travelblog.octopi.lan`)"
+            - "traefik.http.routers.whoami.entrypoints=web"
 
     gerbera:
         image: gerbera/gerbera
