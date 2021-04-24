@@ -23,6 +23,7 @@ services:
             - cluster
         volumes:
             - maindb:/var/lib/mysql
+        restart: unless-stopped
 
     redis:
         image: arm32v7/redis
@@ -33,11 +34,24 @@ services:
             - cluster
         environment:
             - ALLOW_EMPTY_PASSWORD=yes
+        restart: unless-stopped
+
+    traefik:
+        container_name: traefik
+        image: traefik:v2.0
+        ports:
+            - "80:80/tcp"
+            - "8080:8080/tcp"
+        networks:
+            - cluster
+        volumes:
+            - $PWD/dockerbuild/traefik/traefik.yml:/etc/traefik/traefik.yml
+            - /var/run/docker.sock:/var/run/docker.sock
+        restart: unless-stopped
         
     nextcloud:
         image: nextcloud
         container_name: nextcloud
-        restart: always
         ports:
             - "8081:80"
         networks:
@@ -59,24 +73,25 @@ services:
         secrets:
             - nextcloud_admin_password
             - nextcloud_admin_user
+        restart: unless-stopped
 
     travelblog:
         image: wordpress
         container_name: travelblog
-        restart: always
         environment:
             WORDPRESS_DB_HOST: maindb
             WORDPRESS_DB_USER: travelblog
             WORDPRESS_DB_PASSWORD: travelblog
             WORDPRESS_DB_NAME: travelblog
         ports:
-            - "8080:80"
+            - "8082:80"
         networks:
             - cluster
         volumes:
             - travelblog:/var/www/html
         depends_on:
             - maindb
+        restart: unless-stopped
 
     gerbera:
         image: gerbera/gerbera
@@ -88,6 +103,7 @@ services:
         networks: 
             lan:
                 ipv4_address: 192.168.178.250
+        restart: unless-stopped
 
     pihole:
         container_name: pihole
