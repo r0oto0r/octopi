@@ -97,9 +97,9 @@ services:
             - maindb
         restart: unless-stopped
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.whoami.rule=Host(`travelblog.octopi.lan`)"
-            - "traefik.http.routers.whoami.entrypoints=web"
+            - traefik.enable=true
+            - traefik.http.routers.travelblog.rule=Host(`travelblog.octopi.lan`)
+            - traefik.http.routers.travelblog.entrypoints=web
 
     gerbera:
         image: gerbera/gerbera
