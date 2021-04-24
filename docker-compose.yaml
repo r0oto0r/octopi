@@ -89,6 +89,24 @@ services:
             lan:
                 ipv4_address: 192.168.178.250
 
+    pihole:
+        container_name: pihole
+        image: pihole/pihole:latest
+        ports:
+            - "53:53/tcp"
+            - "53:53/udp"
+            - "67:67/udp"
+            - "8083:80/tcp"
+        networks:
+            - cluster
+        environment:
+            TZ: 'Europe/Berlin'
+            WEBPASSWORD: p1h0l3
+        volumes:
+            - pihole:/etc/pihole/
+            - dnsmasq:/etc/dnsmasq.d/
+        restart: unless-stopped
+
 volumes:
     maindb:
         name: maindb
@@ -100,6 +118,10 @@ volumes:
         name: gerberaconfig
     gerberacontent:
         name: gerberacontent
+    pihole:
+        name: pihole
+    dnsmasq:
+        name: dnsmasq
 
 secrets:
     nextcloud_admin_user:
