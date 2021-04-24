@@ -78,6 +78,10 @@ services:
             - nextcloud_admin_password
             - nextcloud_admin_user
         restart: unless-stopped
+    labels:
+        - traefik.enable=true
+        - traefik.http.routers.nextcloud.rule=Host(`nextcloud.octopi.lan`)
+        - traefik.http.routers.nextcloud.entrypoints=web
 
     travelblog:
         image: wordpress
@@ -130,6 +134,10 @@ services:
             - pihole:/etc/pihole/
             - dnsmasq:/etc/dnsmasq.d/
         restart: unless-stopped
+        labels:
+            - traefik.enable=true
+            - traefik.http.routers.pihole.rule=Host(`pihole.octopi.lan`)
+            - traefik.http.routers.pihole.entrypoints=web
 
 volumes:
     maindb:
