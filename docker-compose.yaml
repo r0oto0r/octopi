@@ -140,7 +140,7 @@ services:
             - traefik.http.routers.pihole.entrypoints=web
 
     openvpn:
-        image: kylemanna/openvpn
+        image: giggio/openvpn-arm
         container_name: openvpn
         cap_add:
             - NET_ADMIN
