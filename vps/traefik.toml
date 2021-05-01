@@ -1,21 +1,19 @@
 [entryPoints]
-    [entryPoints.web]
-    address = "0.0.0.0:80"
-    [entryPoints.websecure]
-    address = "0.0.0.0:443"
+  [entryPoints.web]
+  address = "0.0.0.0:80"
+  [entryPoints.websecure]
+  address = "0.0.0.0:443"
 
 [api]
-    dashboard = true
+  dashboard = true
 
 [providers.docker]
-    endpoint = "unix:///var/run/docker.sock"
-    domain = "forkbomb.dev"
-    exposedByDefault = false
+  endpoint = "unix:///var/run/docker.sock"
+  domain = "forkbomb.dev"
+  watch = true
+  exposedByDefault = false
 
 [certificatesResolvers.letsencrypt.acme]
-    email = "ben@forkbomb.dev"
-    storage = "acme.json"
-    entryPoint = "https"
-    onHostRule = true
-
-[certificatesResolvers.letsencrypt.acme.tlsChallenge]
+  email = "ben@forkbomb.dev"
+  storage = "acme.json"
+  [certificatesResolvers.letsencrypt.acme.tlsChallenge]
