@@ -24,6 +24,7 @@ services:
         volumes:
             - $PWD/traefik.toml:/traefik.toml
             - $PWD/acme.json:/acme.json
+            - $PWD/dynamic_routers.toml:/dynamic_routers/dynamic_routers.toml
             - /var/run/docker.sock:/var/run/docker.sock:ro
         restart: unless-stopped
         labels:
