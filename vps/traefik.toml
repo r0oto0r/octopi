@@ -1,7 +1,7 @@
 [entryPoints]
-    [entryPoints.http]
+    [entryPoints.web]
     address = "0.0.0.0:80"
-    [entryPoints.https]
+    [entryPoints.websecure]
     address = "0.0.0.0:443"
 
 [api]
