@@ -17,6 +17,7 @@ services:
         image: traefik:v2.0
         ports:
             - "81:80/tcp"
+            - "8080:8080/tcp"
             - "444:443/tcp"
         volumes:
             - ./traefik.toml:/etc/traefik/traefik.toml
