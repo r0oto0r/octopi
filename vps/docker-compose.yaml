@@ -24,11 +24,21 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
         restart: unless-stopped
         labels:
-            - "traefik.http.routers.api.rule=Host(`traefik.forkbomb.dev`)"
-            - "traefik.http.routers.api.service=api@internal"
-            - "traefik.http.routers.api.entrypoints=http"
-            - "traefik.http.routers.api.middlewares=auth"
+            - "traefik.enable=true"
+            
+            - "traefik.http.routers.traefik_https.rule=Host(`traefik.forkbomb.dev`)"
+            - "traefik.http.routers.traefik_https.entrypoints=websecure"
+            - "traefik.http.routers.traefik_https.tls=true"
+            # - "traefik.http.routers.traefik_https.tls.certResolver=letsencrypt"
+            - "traefik.http.routers.traefik_https.service=api@internal"
+            - "traefik.http.routers.traefik_https.middlewares=traefik-auth"
             - "traefik.http.middlewares.auth.basicauth.users=USER:PASSWORD"
+
+            - "traefik.http.routers.http_traefik.rule=Host(`traefik.forkbomb.dev`)"
+            - "traefik.http.routers.http_traefik.entrypoints=web"
+            - "traefik.http.routers.http_traefik.middlewares=https_redirect"
+            - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
+            - "traefik.http.middlewares.https_redirect.redirectscheme.permanent=true"
         depends_on:
             - openvpn
 
