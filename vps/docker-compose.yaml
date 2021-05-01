@@ -21,6 +21,7 @@ services:
             - "443:443/tcp"
         volumes:
             - ./traefik.toml:/etc/traefik/traefik.toml
+            - ./acme.json:/etc/traefik/acme.json
             - /var/run/docker.sock:/var/run/docker.sock:ro
         restart: unless-stopped
         labels:
@@ -29,7 +30,7 @@ services:
             - "traefik.http.routers.traefik_https.rule=Host(`traefik.forkbomb.dev`)"
             - "traefik.http.routers.traefik_https.entrypoints=websecure"
             - "traefik.http.routers.traefik_https.tls=true"
-            # - "traefik.http.routers.traefik_https.tls.certResolver=letsencrypt"
+            - "traefik.http.routers.traefik_https.tls.certResolver=letsencrypt"
             - "traefik.http.routers.traefik_https.service=api@internal"
             - "traefik.http.routers.traefik_https.middlewares=auth"
             - "traefik.http.middlewares.auth.basicauth.users=USER:PASSWORD"

@@ -9,3 +9,13 @@
 
 [providers.docker]
     endpoint = "unix:///var/run/docker.sock"
+    domain = "forkbomb.dev"
+    exposedByDefault = false
+
+[certificatesResolvers.letsencrypt.acme]
+    email = "ben@forkbomb.dev"
+    storage = "acme.json"
+    entryPoint = "https"
+    onHostRule = true
+
+[certificatesResolvers.letsencrypt.acme.tlsChallenge]
