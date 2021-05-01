@@ -35,5 +35,5 @@
     [http.routers.nextcloud.tls]
       certResolver = "letsencrypt"
       [[http.routers.routerbar.tls.domains]]
-        main = "forkbombc.dev"
+        main = "forkbomb.dev"
         sans = ["nextcloud.forkbomb.dev"]
