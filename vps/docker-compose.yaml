@@ -1,5 +1,5 @@
 version: '3.9'
-          
+
 services:
     openvpn:
         image: dperson/openvpn-client
@@ -11,3 +11,10 @@ services:
         volumes:
             - ./vpn:/vpn
         restart: always
+
+    helper:
+        image: debian:buster
+        depends_on:
+            - openvpn
+        container_name: helper
+        network_mode: container:openvpn
