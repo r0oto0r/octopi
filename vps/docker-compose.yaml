@@ -12,9 +12,29 @@ services:
             - ./vpn:/vpn
         restart: always
 
-    helper:
-        image: debian:buster
+    traefik:
+        container_name: traefik
+        image: traefik:v2.0
+        ports:
+            - "81:80/tcp"
+            - "444:443/tcp"
+        network_mode: container:openvpn
+        volumes:
+            - ./traefik.toml:/etc/traefik/traefik.toml
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+        restart: unless-stopped
+        labels:
+            - "traefik.http.routers.api.rule=Host(`traefik.forkbomb.dev`)"
+            - "traefik.http.routers.api.service=api@internal"
+            - "traefik.http.routers.api.entrypoints=http"
+            - "traefik.http.routers.api.middlewares=auth"
+            - "traefik.http.middlewares.auth.basicauth.users=USER:PASSWORD"
         depends_on:
             - openvpn
+
+    helper:
+        image: debian:buster
         container_name: helper
         network_mode: container:openvpn
+        depends_on:
+            - openvpn
