@@ -23,17 +23,17 @@
   caServer = "https://acme-v02.api.letsencrypt.org/directory"
   [certificatesResolvers.letsencrypt.acme.tlsChallenge]
 
-[http.services]
-  [http.services.nextcloud.loadBalancer]
-    [[http.services.nextcloud.loadBalancer.servers]]
-      url = "http://192.168.178.253:8081/"
-
-[http.routers]
-  [http.routers.nextcloud]
-    rule = "Host(`nextcloud.forkbomb.dev`)"
-    service = "nextcloud"
-    [http.routers.nextcloud.tls]
-      certResolver = "letsencrypt"
-      [[http.routers.nextcloud.tls.domains]]
-        main = "forkbomb.dev"
-        sans = ["nextcloud.forkbomb.dev"]
+[http]
+  [http.services]
+    [http.services.nextcloud.loadBalancer]
+      [[http.services.nextcloud.loadBalancer.servers]]
+        url = "http://192.168.178.253:8081/"
+  [http.routers]
+    [http.routers.nextcloud]
+      rule = "Host(`nextcloud.forkbomb.dev`)"
+      service = "nextcloud"
+      [http.routers.nextcloud.tls]
+        certResolver = "letsencrypt"
+        [[http.routers.nextcloud.tls.domains]]
+          main = "forkbomb.dev"
+          sans = ["nextcloud.forkbomb.dev"]
