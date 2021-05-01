@@ -6,8 +6,14 @@ services:
         container_name: openvpn
         cap_add:
             - NET_ADMIN
+        ports:
+            - "443:443"
+            - "80:80"
         devices: 
             - /dev/net/tun
+        dns:
+            - "8.8.8.8"
+            - "192.168.178.253"
         volumes:
             - ./vpn:/vpn
         restart: always
@@ -15,10 +21,6 @@ services:
     traefik:
         container_name: traefik
         image: traefik:v2.4
-        ports:
-            - "80:80/tcp"
-            - "8080:8080/tcp"
-            - "443:443/tcp"
         volumes:
             - $PWD/traefik.toml:/traefik.toml
             - $PWD/acme.json:/acme.json
@@ -26,6 +28,7 @@ services:
         restart: unless-stopped
         labels:
             - "traefik.enable=true"
+            - "traefik.http.services.justAdummyService.loadbalancer.server.port=1337"
             - "traefik.http.routers.traefik.rule=Host(`traefik.forkbomb.dev`)"
             - "traefik.http.routers.traefik.entrypoints=websecure"
             - "traefik.http.routers.traefik.tls=true"
