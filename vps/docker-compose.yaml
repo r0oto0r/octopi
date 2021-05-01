@@ -31,7 +31,7 @@ services:
             - "traefik.http.routers.traefik_https.tls=true"
             # - "traefik.http.routers.traefik_https.tls.certResolver=letsencrypt"
             - "traefik.http.routers.traefik_https.service=api@internal"
-            - "traefik.http.routers.traefik_https.middlewares=traefik-auth"
+            - "traefik.http.routers.traefik_https.middlewares=auth"
             - "traefik.http.middlewares.auth.basicauth.users=USER:PASSWORD"
 
             - "traefik.http.routers.http_traefik.rule=Host(`traefik.forkbomb.dev`)"
