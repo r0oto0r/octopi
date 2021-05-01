@@ -16,16 +16,16 @@ services:
         container_name: traefik
         image: traefik:v2.0
         ports:
-            - "81:80/tcp"
+            - "80:80/tcp"
             - "8080:8080/tcp"
-            - "444:443/tcp"
+            - "443:443/tcp"
         volumes:
             - ./traefik.toml:/etc/traefik/traefik.toml
             - /var/run/docker.sock:/var/run/docker.sock:ro
         restart: unless-stopped
         labels:
             - "traefik.enable=true"
-            
+
             - "traefik.http.routers.traefik_https.rule=Host(`traefik.forkbomb.dev`)"
             - "traefik.http.routers.traefik_https.entrypoints=websecure"
             - "traefik.http.routers.traefik_https.tls=true"
