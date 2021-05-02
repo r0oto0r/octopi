@@ -3,6 +3,9 @@
     [http.services.nextcloud.loadBalancer]
       [[http.services.nextcloud.loadBalancer.servers]]
         url = "http://192.168.178.253:8081/"
+    [http.services.travelblog.loadBalancer]
+      [[http.services.travelblog.loadBalancer.servers]]
+        url = "http://192.168.178.253:8085/"
   [http.routers]
     [http.routers.nextcloud]
       rule = "Host(`nextcloud.forkbomb.dev`)"
@@ -12,3 +15,11 @@
         [[http.routers.nextcloud.tls.domains]]
           main = "forkbomb.dev"
           sans = ["nextcloud.forkbomb.dev"]
+    [http.routers.travelblog]
+      rule = "Host(`travelblog.forkbomb.dev`)"
+      service = "travelblog"
+      [http.routers.travelblog.tls]
+        certResolver = "letsencrypt"
+        [[http.routers.travelblog.tls.domains]]
+          main = "forkbomb.dev"
+          sans = ["travelblog.forkbomb.dev"]
