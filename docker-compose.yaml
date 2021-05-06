@@ -72,6 +72,7 @@ services:
             - NEXTCLOUD_TRUSTED_DOMAINS="localhost 192.168.178.253 nextcloud.forkbomb.dev nextcloud.colonelpanic.dev nextcloud.octopi.lan"
             - REDIS_HOST=redis
             - REDIS_HOST_PORT=6379
+            - OVERWRITEPROTOCOL=http
         depends_on:
             - maindb
             - redis
